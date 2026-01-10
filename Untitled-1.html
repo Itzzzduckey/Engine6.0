@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Engine6.0 — Home</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: radial-gradient(circle at top right, #ff6b6b, #8b0000 40%, #000 75%);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    canvas#bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      z-index: 2;
+    }
+
+    .nav .left,
+    .nav .right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .nav a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .login {
+      background: #111;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .badge {
+      background: rgba(0,0,0,0.4);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    h1 span {
+      color: #ff6b6b;
+    }
+
+    .subtitle {
+      margin-top: 18px;
+      max-width: 520px;
+      opacity: 0.85;
+      font-size: 0.95rem;
+    }
+
+    .actions {
+      margin-top: 30px;
+      display: flex;
+      gap: 14px;
+    }
+
+    .btn {
+      padding: 12px 26px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .floating {
+      position: absolute;
+      background: rgba(0,0,0,0.45);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      opacity: 0.85;
+      backdrop-filter: blur(8px);
+    }
+
+    .f1 { top: 35%; left: 10%; }
+    .f2 { top: 45%; right: 12%; }
+    .f3 { bottom: 30%; right: 18%; }
+
+  
+    /* ADVANCED HOVER EFFECTS */
+    .nav a {
+      position: relative;
+      transition: color .25s ease;
+    }
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -6px;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform .35s ease;
+    }
+    .nav a:hover { color: #fff; }
+    .nav a:hover::after { transform: scaleX(1); }
+
+    .login {
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .login:hover {
+      transform: translateY(-1px);
+      background: #1a1a1a;
+      box-shadow: 0 10px 30px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.1);
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+    }
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120px 120px at var(--x,50%) var(--y,50%), rgba(255,255,255,.35), transparent 60%);
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    .btn:hover::before { opacity: 1; }
+    .btn:hover { transform: translateY(-2px) scale(1.02); }
+
+    .btn.primary:hover {
+      box-shadow: 0 20px 60px rgba(255,107,107,.45);
+    }
+    .btn.secondary:hover {
+      background: rgba(255,255,255,.18);
+      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    }
+
+    .floating {
+      transition: transform .35s ease, box-shadow .35s ease, opacity .35s ease;
+    }
+    .floating:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      opacity: 1;
+    }
+    /* LOADING SCREEN */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #ff3b3b, #6b0000 45%, #000 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity .8s ease, visibility .8s ease;
+}
+
+#loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-core {
+  text-align: center;
+}
+
+.ring {
+  width: 90px;
+  height: 90px;
+  border: 3px solid rgba(255,255,255,.1);
+  border-top: 3px solid #ff6b6b;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+  margin: 0 auto 18px;
+  box-shadow: 0 0 40px rgba(255,107,107,.6);
+}
+
+.text {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #fff;
+  animation: glitch 1.5s infinite;
+}
+
+.sub {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  opacity: .8;
+  color: #ffb3b3;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes glitch {
+  0% { text-shadow: 0 0 0 #ff6b6b; }
+  20% { text-shadow: 2px 0 #ff6b6b; }
+  40% { text-shadow: -2px 0 #ff0000; }
+  60% { text-shadow: 1px 0 #ff6b6b; }
+  100% { text-shadow: 0 0 0 #ff6b6b; }
+}
+
+  </style>
+</head>
+<body>
+    <!-- LOADING SCREEN -->
+<div id="loader">
+  <div class="loader-core">
+    <div class="ring"></div>
+    <div class="text">ENGINE6.0</div>
+    <div class="sub">Initializing Secure Engine</div>
+  </div>
+</div>
+
+  <canvas id="bg"></canvas>
+
+  <div class="nav">
+    <div class="left">
+      <div class="logo">Engine6.0</div>
+    <a href="index.html">Home</a>
+    <a href="storage.html">Storage</a>
+    <a href="status.html">Status</a>
+    <a href="store.html">Products</a>
+
+    </div>
+    <div class="right">
+      <div class="login">Powered By Pulse Engine6.0</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="badge">● Engine6.0</div>
+    <h1>Leading Softwhere<br><span>Fast And Secure</span></h1>
+    <div class="subtitle">Secure Purchase Powered by paypal and stripe. Clean, fast, and built for Fast Purchases.</div>
+    <div class="actions">
+
+<div class="actions">
+  <a href="index.html">
+    <button class="btn secondary">Try for yourself</button>
+  </a>
+
+  <a href="store.html">
+    <button class="btn primary">Buy now</button>
+  </a>
+</div>
+
+    </div>
+  </div>
+
+  <div class="floating f1">Trusted Worldwide</div>
+  <div class="floating f2">Try Engine6.0 today</div>
+  <div class="floating f3">★ Best in the Market</div>
+
+  <script>
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const dots = Array.from({ length: 90 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const d of dots) {
+        d.x += d.vx;
+        d.y += d.vy;
+
+        if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+        if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+
+        ctx.fillStyle = 'rgba(255,120,120,0.8)';
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, 1.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (let i = 0; i < dots.length; i++) {
+        for (let j = i + 1; j < dots.length; j++) {
+          const dx = dots[i].x - dots[j].x;
+          const dy = dots[i].y - dots[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 110) {
+            ctx.strokeStyle = `rgba(255,100,100,${1 - dist / 110})`;
+            ctx.beginPath();
+            ctx.moveTo(dots[i].x, dots[i].y);
+            ctx.lineTo(dots[j].x, dots[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
+<script>
+// Disable right-click
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+// Disable certain key combinations
+document.addEventListener('keydown', function(e) {
+    // F12
+    if(e.key === "F12") e.preventDefault();
+
+    // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+    if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+
+    // Ctrl+U, Ctrl+S, Ctrl+H, Ctrl+A
+    if(e.ctrlKey && ['U','S','H','A'].includes(e.key.toUpperCase())) e.preventDefault();
+
+    // Ctrl+Shift+U (for some browsers)
+    if(e.ctrlKey && e.shiftKey && e.key.toUpperCase() === 'U') e.preventDefault();
+
+    // Backspace prevention outside inputs
+    if(e.key === "Backspace" && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+    }
+});
+
+// Disable text selection and copying
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+
+// Prevent drag
+document.addEventListener('dragstart', e => e.preventDefault());
+
+// Disable browser back
+history.pushState(null, null, location.href);
+window.addEventListener('popstate', function () {
+    history.pushState(null, null, location.href);
+});
+
+// Optional: Prevent opening devtools via mouse events (Chrome Edge)
+window.addEventListener('keydown', function(e){
+    if(e.keyCode == 123) { // F12
+        e.preventDefault();
+    }
+});
+
+// Optional: Disable right-click context menu on all elements
+document.querySelectorAll('*').forEach(el => {
+    el.oncontextmenu = () => false;
+});
+
+console.log("Security scripts active: Right-click, DevTools, Back, Copy disabled.");
+</script>
+<script>
+(function () {
+  const hideLoader = () => {
+    const loader = document.getElementById('loader');
+    if (!loader) return;
+
+    loader.classList.add('hidden');
+
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 900);
+  };
+
+  // Hide after DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(hideLoader, 800);
+  });
+
+  // Fallback: force hide no matter what
+  setTimeout(hideLoader, 3000);
+})();
+</script>

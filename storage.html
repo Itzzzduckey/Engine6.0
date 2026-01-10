@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Engine6.0 — Storage</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top right, #ff6b6b, #8b0000 35%, #000 80%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    canvas#bg { position: fixed; inset: 0; z-index: 0; }
+
+    .nav {
+      position: sticky; top: 0; z-index: 3;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 40px; background: linear-gradient(to bottom, rgba(0,0,0,.55), transparent);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav .left { display: flex; gap: 26px; align-items: center; }
+    .logo { font-weight: 800; }
+    .nav a { color: rgba(255,255,255,.8); text-decoration: none; font-size: .9rem; position: relative; }
+    .nav a::after {
+      content: ""; position: absolute; left: 0; bottom: -6px; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+      transform: scaleX(0); transition: transform .35s ease;
+    }
+    .nav a:hover::after { transform: scaleX(1); }
+
+    .page {
+      position: relative; z-index: 1;
+      padding: 80px 60px 120px;
+      max-width: 1400px; margin: auto;
+    }
+
+    h1 {
+      font-size: 2.6rem; font-weight: 800; margin-bottom: 12px;
+    }
+
+    .subtitle { opacity: .8; margin-bottom: 50px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.8));
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+      transition: transform .35s ease, box-shadow .35s ease;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(300px 120px at var(--x,50%) var(--y,50%), rgba(255,107,107,.35), transparent 60%);
+      opacity: 0; transition: opacity .35s ease;
+    }
+
+    .card:hover::before { opacity: 1; }
+    .card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 40px 120px rgba(255,107,107,.25); }
+
+    .game {
+      font-weight: 700; font-size: 1.2rem; margin-bottom: 6px;
+    }
+
+    .desc { font-size: .85rem; opacity: .75; margin-bottom: 20px; }
+
+    .meta { display: flex; justify-content: space-between; align-items: center; }
+
+    .tag {
+      font-size: .7rem; padding: 6px 12px; border-radius: 999px;
+      background: rgba(0,0,0,.5);
+    }
+
+    .btn {
+      padding: 10px 20px; border-radius: 999px; border: none;
+      background: #fff; color: #000; font-size: .8rem; font-weight: 600;
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(255,107,107,.45); }
+
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <div class="nav">
+    <div class="left">
+      <div class="logo">Engine6.0</div>
+    <a href="index.html">Home</a>
+    <a href="storage.html">Storage</a>
+    <a href="status.html">Status</a>
+    <a href="store.html">Products</a>
+    </div>
+  </div>
+<div class="page">
+  <h1>Game Storage</h1>
+  <div class="subtitle">Secure, isolated script storage per supported title.</div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="game">ImGui</div>
+      <div class="desc">Custom ImGui menus, internals, loaders, sources</div>
+      <div class="meta">
+        <div class="tag">Online</div>
+        <a href="imgui.html" target="_blank">
+          <button class="btn">Open Storage</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="game">Fortnite</div>
+      <div class="desc">Externals, internals, loaders, configs</div>
+      <div class="meta">
+        <div class="tag">Online</div>
+        <a href="forntnight.html" target="_blank">
+          <button class="btn">Open Storage</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="game">FiveM</div>
+      <div class="desc">Lua scripts, executors, Externals, Internals</div>
+      <div class="meta">
+        <div class="tag">Online</div>
+        <a href="fivem.html" target="_blank">
+          <button class="btn">Open Storage</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="game">Software</div>
+      <div class="desc">C++ Devices and more</div>
+      <div class="meta">
+        <div class="tag">Stable</div>
+        <a href="Softwhere.html" target="_blank">
+          <button class="btn">Open Storage</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="game">Roblox</div>
+      <div class="desc">Roblox Lua tools & environments</div>
+      <div class="meta">
+        <div class="tag">Beta</div>
+        <a href="roblox.html" target="_blank">
+          <button class="btn">Open Storage</button>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+  <script>
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+
+    function resize(){ canvas.width = innerWidth; canvas.height = innerHeight }
+    addEventListener('resize', resize); resize();
+
+    const dots = Array.from({length:70},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}))
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      dots.forEach(d=>{
+        d.x+=d.vx; d.y+=d.vy;
+        if(d.x<0||d.x>innerWidth) d.vx*=-1;
+        if(d.y<0||d.y>innerHeight) d.vy*=-1;
+        ctx.fillStyle='rgba(255,120,120,.8)';
+        ctx.beginPath(); ctx.arc(d.x,d.y,1.2,0,Math.PI*2); ctx.fill();
+      })
+      for(let i=0;i<dots.length;i++)for(let j=i+1;j<dots.length;j++){
+        const dx=dots[i].x-dots[j].x,dy=dots[i].y-dots[j].y,dist=Math.hypot(dx,dy);
+        if(dist<110){ctx.strokeStyle=`rgba(255,100,100,${1-dist/110})`;ctx.beginPath();ctx.moveTo(dots[i].x,dots[i].y);ctx.lineTo(dots[j].x,dots[j].y);ctx.stroke()}
+      }
+      requestAnimationFrame(draw)
+    }
+    draw();
+
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('mousemove',e=>{
+        const r=card.getBoundingClientRect();
+        card.style.setProperty('--x',`${e.clientX-r.left}px`);
+        card.style.setProperty('--y',`${e.clientY-r.top}px`);
+      })
+    })
+  </script>
+</body>
+</html>
+<script>
+// Disable right-click
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+// Disable certain key combinations
+document.addEventListener('keydown', function(e) {
+    // F12
+    if(e.key === "F12") e.preventDefault();
+
+    // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+    if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+
+    // Ctrl+U, Ctrl+S, Ctrl+H, Ctrl+A
+    if(e.ctrlKey && ['U','S','H','A'].includes(e.key.toUpperCase())) e.preventDefault();
+
+    // Ctrl+Shift+U (for some browsers)
+    if(e.ctrlKey && e.shiftKey && e.key.toUpperCase() === 'U') e.preventDefault();
+
+    // Backspace prevention outside inputs
+    if(e.key === "Backspace" && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+    }
+});
+
+// Disable text selection and copying
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+
+// Prevent drag
+document.addEventListener('dragstart', e => e.preventDefault());
+
+// Disable browser back
+history.pushState(null, null, location.href);
+window.addEventListener('popstate', function () {
+    history.pushState(null, null, location.href);
+});
+
+// Optional: Prevent opening devtools via mouse events (Chrome Edge)
+window.addEventListener('keydown', function(e){
+    if(e.keyCode == 123) { // F12
+        e.preventDefault();
+    }
+});
+
+// Optional: Disable right-click context menu on all elements
+document.querySelectorAll('*').forEach(el => {
+    el.oncontextmenu = () => false;
+});
+
+console.log("Security scripts active: Right-click, DevTools, Back, Copy disabled.");
+</script>

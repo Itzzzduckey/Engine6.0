@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>redENGINE — Software Downloads</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; font-family:Inter,sans-serif }
+
+body {
+  min-height:100vh;
+  background: radial-gradient(circle at top right,#ff6b6b,#8b0000 35%,#000 80%);
+  color:#fff; overflow-x:hidden;
+}
+
+canvas#bg { position:fixed; inset:0; z-index:0 }
+
+.nav {
+  position:sticky; top:0; z-index:3;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:20px 40px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent);
+  backdrop-filter:blur(10px)
+}
+
+.logo { font-weight:800 }
+
+.page {
+  position:relative; z-index:1;
+  max-width:1400px; margin:auto;
+  padding:70px 50px 120px;
+}
+
+h1 { font-size:2.6rem; margin-bottom:10px }
+.subtitle { opacity:.8; margin-bottom:50px }
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:28px
+}
+
+.panel {
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.85));
+  border-radius:18px; padding:24px;
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+  transition:transform .35s ease, box-shadow .35s ease;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.panel::before {
+  content:"";
+  position:absolute; inset:0;
+  background:radial-gradient(260px 120px at var(--x,50%) var(--y,50%), rgba(255,107,107,.35), transparent 60%);
+  opacity:0; transition:opacity .35s ease;
+}
+
+.panel:hover::before { opacity:1 }
+.panel:hover { transform:translateY(-10px) scale(1.02); box-shadow:0 50px 130px rgba(255,107,107,.35) }
+
+.ptype { font-size:.7rem; letter-spacing:1px; opacity:.7; margin-bottom:10px }
+.pname { font-size:1.3rem; font-weight:700; margin-bottom:8px }
+.pdesc { font-size:.85rem; opacity:.8; margin-bottom:22px }
+
+.actions { display:flex; justify-content:space-between; align-items:center }
+
+.tag {
+  font-size:.7rem; padding:6px 12px; border-radius:999px;
+  background:rgba(0,0,0,.55)
+}
+
+.btn {
+  padding:10px 22px; border-radius:999px; border:none;
+  background:#fff; color:#000;
+  font-size:.75rem; font-weight:600; cursor:pointer;
+  position:relative; overflow:hidden;
+  transition:transform .25s ease, box-shadow .25s ease
+}
+
+.btn:hover { transform:translateY(-2px); box-shadow:0 18px 50px rgba(255,107,107,.45) }
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+
+#keyInput{width:100%;padding:10px;border-radius:999px;border:none;margin-top:10px;background:rgba(255,255,255,.1);color:#fff;font-size:1rem;text-align:center;}
+#keyInput::placeholder{color:rgba(255,255,255,.5);}
+.keyAccepted{color:#00ff00;font-weight:700;font-size:1rem;margin-top:10px;text-align:center;}
+
+/* Warning Panel */
+#warnPanel{position:fixed;top:-150px;left:50%;transform:translateX(-50%);width:400px;background:#1a1a1a;padding:30px;border-radius:20px;box-shadow:0 20px 60px rgba(255,0,0,.6);text-align:center;z-index:999;color:#fff;transition:top .5s ease,opacity .5s ease, transform .5s ease;opacity:0;}
+#warnPanel.show{top:50px;opacity:1;transform:translateX(-50%) scale(1);}
+#warnPanel h2{margin-bottom:15px;font-weight:700;}
+#warnPanel p{margin-bottom:20px;}
+#warnPanel button{padding:10px 22px;border-radius:999px;border:none;background:#ff6b6b;color:#fff;font-weight:600;cursor:pointer;transition:transform .25s ease, box-shadow .25s ease;}
+#warnPanel button:hover{transform:translateY(-2px);box-shadow:0 18px 50px rgba(255,100,100,.5);}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<div class="nav">
+  <div class="logo">redENGINE</div>
+  <div>Software Downloads</div>
+</div>
+
+<div class="page">
+<h1>Software Download Hub</h1>
+<div class="subtitle">Enter the Engine6.0 key to unlock all downloads</div>
+
+<div class="grid">
+
+<!-- Key Panel -->
+<div class="panel" id="keyPanel">
+  <div class="ptype">ACCESS</div>
+  <div class="pname">Engine6.0 Key</div>
+  <div class="pdesc">Enter the universal download key to unlock all software downloads.</div>
+  <div class="actions">
+    <input type="text" id="keyInput" placeholder="Enter Key..." />
+    <button class="btn" id="keySubmit">Submit</button>
+  </div>
+  <div id="keyMessage" class="keyAccepted" style="display:none;">Key Accepted!</div>
+</div>
+
+<!-- Software Panels -->
+<div class="panel" data-link="https://example.com/software1.exe">
+  <div class="ptype">System checker2.0</div>
+  <div class="pname">Displays all of ur computer Serials to see if they have changed after spoofer</div>
+  <div class="pdesc">Made by itzzzduckey Wokring on all windows Version</div>
+  <div class="actions"><div class="tag">Stable</div><button class="btn downloadBtn" disabled>Download</button></div>
+</div>
+
+<div class="panel" data-link="https://example.com/software2.exe">
+  <div class="ptype">Cheat Engine</div>
+  <div class="pname">Used to find valuse and change them in games iwtout anti cheat</div>
+  <div class="pdesc">Look up youtube Tutorial on how to use</div>
+  <div class="actions"><div class="tag">Updated</div><button class="btn downloadBtn" disabled>Download</button></div>
+</div>
+
+<div class="panel" data-link="https://example.com/software3.exe">
+  <div class="ptype">Loader</div>
+  <div class="pname">Engine6.0 Loader</div>
+  <div class="pdesc">Loader for all Products</div>
+  <div class="actions"><div class="tag">Oflline</div><button class="btn downloadBtn" disabled>Download</button></div>
+</div>
+
+<div class="panel" data-link="https://example.com/software4.exe">
+  <div class="ptype">Steam Achivemnt Unloacker</div>
+  <div class="pname">A ud steam Achivment unloacker works for almost evrey game and all version of windows</div>
+  <div class="pdesc">made by idk</div>
+  <div class="actions"><div class="tag">Pro</div><button class="btn downloadBtn" disabled>Download</button></div>
+</div>
+
+</div>
+</div>
+
+<!-- Warning Panel -->
+<div id="warnPanel">
+<h2>Warning!</h2>
+<p id="warnText"></p>
+<button id="warnProceed">Proceed</button>
+</div>
+
+<script>
+// ===== Particle Background =====
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+addEventListener('resize',resize);resize();
+const dots=Array.from({length:80},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}));
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  dots.forEach(d=>{d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>innerWidth)d.vx*=-1;if(d.y<0||d.y>innerHeight)d.vy*=-1;ctx.fillStyle='rgba(255,120,120,.8)';ctx.beginPath();ctx.arc(d.x,d.y,1.3,0,Math.PI*2);ctx.fill();});
+  for(let i=0;i<dots.length;i++)for(let j=i+1;j<dots.length;j++){const dx=dots[i].x-dots[j].x,dy=dots[i].y-dots[j].y,dist=Math.hypot(dx,dy);if(dist<120){ctx.strokeStyle=`rgba(255,100,100,${1-dist/120})`;ctx.beginPath();ctx.moveTo(dots[i].x,dots[i].y);ctx.lineTo(dots[j].x,dots[j].y);ctx.stroke();}}
+  requestAnimationFrame(draw);
+}
+draw();
+
+// ===== Key Logic =====
+const UNIVERSAL_KEY = "Engine6.0";
+const keyInput = document.getElementById('keyInput');
+const keySubmit = document.getElementById('keySubmit');
+const keyMessage = document.getElementById('keyMessage');
+const downloadBtns = document.querySelectorAll('.downloadBtn');
+
+function unlockDownloads() {
+    downloadBtns.forEach(btn=>btn.disabled=false);
+    keyMessage.style.display='block';
+    keyInput.style.display='none';
+    keySubmit.style.display='none';
+    localStorage.setItem('downloadKey',UNIVERSAL_KEY);
+}
+
+if(localStorage.getItem('downloadKey')===UNIVERSAL_KEY){
+    unlockDownloads();
+}
+
+keySubmit.addEventListener('click',()=>{
+    const entered = keyInput.value.trim();
+    if(entered===UNIVERSAL_KEY){
+        unlockDownloads();
+    } else {
+        alert("Incorrect key!");
+        keyInput.value='';
+        keyInput.focus();
+    }
+});
+
+keyInput.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'){ keySubmit.click(); }
+});
+
+// ===== Animated Warning =====
+const warnPanel = document.getElementById('warnPanel');
+const warnText = document.getElementById('warnText');
+const warnProceed = document.getElementById('warnProceed');
+let pendingLink = "";
+
+function showWarning(link){
+    pendingLink = link;
+    warnText.innerText = `Are you sure you want to download this file?\nLink: ${link}`;
+    warnPanel.classList.add('show');
+}
+
+warnProceed.addEventListener('click',()=>{
+    warnPanel.classList.remove('show');
+    window.location.href = pendingLink;
+});
+
+downloadBtns.forEach(btn=>{
+    btn.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        const panel = btn.closest('.panel');
+        showWarning(panel.dataset.link);
+    });
+});
+
+document.querySelectorAll('.panel').forEach(panel=>{
+    panel.addEventListener('mousemove', e=>{
+        const r=panel.getBoundingClientRect();
+        panel.style.setProperty('--x',`${e.clientX-r.left}px`);
+        panel.style.setProperty('--y',`${e.clientY-r.top}px`);
+    });
+});
+</script>
+</body>
+</html>
